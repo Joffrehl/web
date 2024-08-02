@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sumador de Tonalidades</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #e9ecef; /* Color de fondo */
+            font-family: 'Lobster', cursive; /* Fuente decorativa */
+        }
+        .container {
+            text-align: center; /* Centra el contenido */
+            margin-top: 50px; /* Espacio superior */
+        }
+        img {
+            max-width: 300px; /* Ajusta el tamaño máximo de la imagen */
+            border: 2px solid #0d6efd; /* Borde azul */
+            border-radius: 10px; /* Bordes redondeados */
+            margin-top: 20px; /* Espacio superior de la imagen */
+        }
+        .row {
+            align-items: center; /* Alinea verticalmente el contenido */
+        }
+        #notasNecesarias {
+            font-size: 1.5rem; /* Tamaño de fuente más grande */
+            background-color: #0d6efd; /* Fondo azul */
+            color: white; /* Texto blanco */
+            padding: 15px; /* Espacio interno */
+            border-radius: 10px; /* Bordes redondeados */
+            display: inline-block; /* Muestra en línea */
+            margin-top: 10px; /* Espacio superior */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para efecto de profundidad */
+            transition: transform 0.2s; /* Transición suave */
+        }
+        #notasNecesarias:hover {
+            transform: scale(1.05); /* Efecto de aumento al pasar el ratón */
+        }
+        .links {
+            margin-top: 20px; /* Espacio superior de los enlaces */
+        }
+        .links a {
+            margin: 0 10px; /* Espacio entre los enlaces */
+            text-decoration: none; /* Quita la decoración de enlace */
+            color: #0d6efd; /* Color azul para los enlaces */
+        }
+    </style>
+</head>
+<body>
+    <div class="links">
+        <a href="videos.html">Videos</a>
+        <a href="audio.html">Audio</a>
+    </div>
+    <div class="container">
+        <h1>Sumador de Tonalidades</h1>
+        <label for="acorde">Selecciona un acorde:</label>
+        <select id="acorde" onchange="actualizarImagen()" class="form-select">
+            <option value="C">Do</option>
+            <option value="C#">Do sostenido</option>
+            <option value="D">Re</option>
+            <option value="D#">Re sostenido</option>
+            <option value="E">Mi</option>
+            <option value="F">Fa</option>
+            <option value="F#">Fa sostenido</option>
+            <option value="G">Sol</option>
+            <option value="G#">Sol sostenido</option>
+            <option value="A">La</option>
+            <option value="A#">La sostenido</option>
+            <option value="B">Si</option>
+        </select>
+
+        <label for="semitonos">Número de semitonos a sumar:</label>
+        <input type="number" id="semitonos" value="0" class="form-control" />
+
+        <button onclick="calcularAcorde()" class="btn btn-primary">Calcular Acorde</button>
+
+        <h2 id="resultado" class="mt-3"></h2>
+
+        <div class="row">
+            <div class="col">
+                <img id="imagenPiano" src="" alt="Acorde en Piano" style="display: none;">
+            </div>
+            <div class="col">
+                <h3 style="font-family: 'Lobster', cursive;">Notas necesarias:</h3>
+                <p id="notasNecesarias" style="display: none;"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const imagenes = {
+            "C": "piano/do.png",
+            "C#": "piano/do_soste.png",
+            "D": "piano/re.png",
+            "D#": "piano/re_soste.png",
+            "E": "piano/mi.png",
+            "F": "piano/fa.png",
+            "F#": "piano/fa_soste.png",
+            "G": "piano/sol.png",
+            "G#": "piano/sol_soste.png",
+            "A": "piano/la.png",
+            "A#": "piano/la_soste.png",
+            "B": "piano/si.png"
+        };
+
+        const notasAcordes = {
+            "C": "Do, Mi, Fa",
+            "C#": "Do sostenido, Mi, Fa sostenido",
+            "D": "Re, Fa sostenido, La",
+            "D#": "Re sostenido, Fa sostenido, La sostenido",
+            "E": "Mi, Sol sostenido, Si",
+            "F": "Fa, La, Do",
+            "F#": "Fa sostenido, La, Do sostenido",
+            "G": "Sol, Si, Re",
+            "G#": "Sol sostenido, Si, Re sostenido",
+            "A": "La, Do sostenido, Mi",
+            "A#": "La sostenido, Do sostenido, Mi",
+            "B": "Si, Re sostenido, Fa sostenido"
+        };
+
+        function calcularAcorde() {
+            const acorde = document.getElementById("acorde").value;
+            const semitonos = parseInt(document.getElementById("semitonos").value);
+            const acordes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+            const indiceInicial = acordes.indexOf(acorde);
+            const nuevoIndice = (indiceInicial + semitonos) % acordes.length;
+            const acordeResultado = acordes[nuevoIndice];
+            document.getElementById("resultado").innerText = `El acorde resultante es: ${acordeResultado}`;
+            actualizarImagen(acordeResultado);
+        }
+
+        function actualizarImagen(acorde = document.getElementById("acorde").value) {
+            const imagenPiano = document.getElementById("imagenPiano");
+            const notasNecesarias = document.getElementById("notasNecesarias");
+            imagenPiano.src = imagenes[acorde];
+            imagenPiano.style.display = 'block'; // Muestra la imagen del piano
+            notasNecesarias.innerText = notasAcordes[acorde];
+            notasNecesarias.style.display = 'block'; // Muestra las notas necesarias
+        }
+    </script>
+</body>
+</html>
